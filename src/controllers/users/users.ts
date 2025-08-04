@@ -33,6 +33,7 @@ export const loginUser = async (req: Request, res: Response) => {
             message: "Login successful",
             data: {
                 id: getUser.dataValues.id,
+                name: getUser.dataValues.name,
                 email: getUser.dataValues.email
             }
         });

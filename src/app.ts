@@ -10,13 +10,22 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
-app.use(express.json());
 app.use(cors({
   origin: ['http://localhost:3000', "https://fam-connect-blush.vercel.app", "https://fam-connect-ankitas-projects-f5c00b6c.vercel.app"],
   credentials: true,          
 }));
+app.options('*', cors({
+  origin: [
+    'http://localhost:3000',
+    'https://fam-connect-blush.vercel.app',
+    'https://fam-connect-ankitas-projects-f5c00b6c.vercel.app'
+  ],
+  credentials: true
+}));
+app.use(express.json());
 
 app.use('/api', userRouter); 
+
 
 const PORT = Number(process.env.PORT || 5000);
 

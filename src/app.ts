@@ -12,7 +12,7 @@ const server = createServer(app);
 
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:3000', "https://fam-connect-blush.vercel.app", "https://fam-connect-ankitas-projects-f5c00b6c.vercel.app"],
   credentials: true,          
 }));
 

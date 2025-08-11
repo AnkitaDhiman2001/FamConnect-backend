@@ -16,6 +16,7 @@ exports.resetPassword = exports.forgetPassword = exports.loginUser = exports.cre
 const users_1 = __importDefault(require("../../models/users"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const emailSender_1 = require("../../helpers/emailSender");
+const qrGenerator_1 = require("../../helpers/qrGenerator");
 const createUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield users_1.default.create({
@@ -23,6 +24,7 @@ const createUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             email: req.body.email,
             password: bcrypt_1.default.hashSync(req.body.password, 10)
         });
+        const qrCodePath = yield (0, qrGenerator_1.generateAndStoreQrCode)(users, users.id);
         res.status(201).json({ data: users, status: "success", message: "User created successfully" });
     }
     catch (err) {
@@ -45,6 +47,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             message: "Login successful",
             data: {
                 id: getUser.dataValues.id,
+                name: getUser.dataValues.name,
                 email: getUser.dataValues.email
             }
         });

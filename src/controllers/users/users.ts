@@ -2,15 +2,17 @@ import { Request, Response } from "express";
 import Users from "../../models/users";
 import bcrypt from "bcrypt";
 import { sendResetPasswordEmail } from "../../helpers/emailSender";
+import { generateAndStoreQrCode } from "../../helpers/qrGenerator";
 
 export const createUsers = async (req: Request, res: Response) => {
     try {
-        const users = await Users.create({
+        const users: any = await Users.create({
             name: req.body.name,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 10)
-        });
-        res.status(201).json({data: users, status: "success", message: "User created successfully"});
+        })
+        const qrCodePath = await generateAndStoreQrCode(users, users.id);
+        res.status(201).json({data: users, status: "success", message: "User created successfully" });
     } catch (err) {
         res.status(500).json({ message: "Failed to create user", error: err });
     }
@@ -33,6 +35,7 @@ export const loginUser = async (req: Request, res: Response) => {
             message: "Login successful",
             data: {
                 id: getUser.dataValues.id,
+                name: getUser.dataValues.name,
                 email: getUser.dataValues.email
             }
         });
